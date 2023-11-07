@@ -3,5 +3,5 @@ __pycache__
 persist/
 .DS_Store
 .chroma/
-*.pdf
-test_data
+/pdfs
+/real_test_data
