@@ -1,0 +1,38 @@
+  /* PL/I procedure for Shell Sort. */
+ /* Copyright (c) 1996 by R. A. Vowels, from "Introduction to PL/I, Algorithms, and               */
+ /* Structured Programming".  All rights reserved.                                                */
+ /* This subroutine sorts an array by sorting continually-changing sub-groups.                    */
+ SHELL_SORT:
+    PROCEDURE (A) OPTIONS (REORDER);
+
+    /* INCOMING:   A = an array whose elements are to be sorted.                                */
+    /* OUTGOING:   A = the sorted array.  Elements are in ascending order.                      */
+
+    DECLARE A(*) FIXED BINARY;
+    DECLARE Temp                 FIXED BINARY;
+    DECLARE (J, K, N)            FIXED BINARY;
+    DECLARE Gap                  FIXED BINARY UNSIGNED;
+    N = HBOUND(A, 1); /* The number of elements in the array A. */
+
+    Gap = N/2;                            /* The initial gap is half the number of elements.    */
+    DO WHILE (Gap >= 1); /* We are done after the gap is 1, when all */
+
+                                                /* elements are examined in the next loop:            */
+
+        /* Perform a Ranking Sort on selected elements.                                          */
+        DO K = 1 TO N - Gap;
+
+                IF A(K) > A(K+Gap) THEN         /* Select elements every Gap positions apart . .      */
+
+                    DO;
+                        Temp = A(K+Gap);
+                        DO  J = K  TO  1  BY  -Gap  WHILE (A(J) > Temp);
+
+                            A(J+Gap) = A(J);       /* Leapfrog by Gap locations.                         */
+                        END;
+                        A(J+Gap) = Temp;
+                    END;
+                END;
+                Gap = Gap/2;                       /* Halve the gap for the next Ranking Sort.           */
+        END;
+ END SHELL_SORT;
