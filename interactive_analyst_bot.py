@@ -1,3 +1,4 @@
+#example from: https://github.com/techleadhd/chatgpt-retrieval/blob/main/README.md
 import os
 import sys
 
@@ -11,12 +12,17 @@ from langchain.indexes.vectorstore import VectorStoreIndexWrapper
 from langchain.llms import OpenAI
 from langchain.vectorstores import Chroma
 
+#hack to get around sqlite3 error
+import pysqlite3
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 import constants
 
 os.environ["OPENAI_API_KEY"] = constants.API_KEY
 
 # Enable to save to disk & reuse the model (for repeated queries on the same data)
-PERSIST = False
+PERSIST = True
 
 query = None
 if len(sys.argv) > 1:
@@ -28,7 +34,7 @@ if PERSIST and os.path.exists("persist"):
   index = VectorStoreIndexWrapper(vectorstore=vectorstore)
 else:
   #loader = TextLoader("data/data.txt") # Use this line if you only need data.txt
-  loader = DirectoryLoader("data/")
+  loader = DirectoryLoader("real_test_data/")
   if PERSIST:
     index = VectorstoreIndexCreator(vectorstore_kwargs={"persist_directory":"persist"}).from_loaders([loader])
   else:
